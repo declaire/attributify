@@ -43,8 +43,8 @@ export default function Main({code}) {
                 })
                 const tempo = track_analysis.body.tempo
                 if (parseFloat(bpm1) <= parseFloat(tempo) && parseFloat(tempo) <= parseFloat(bpm2)) {
-                    console.log(track.name)
-                    tracks.push(track)
+                    console.log(track)
+                    tracks.push(track.uri)
                 }
             }
             console.log(tracks.length)
@@ -53,19 +53,16 @@ export default function Main({code}) {
                 return;
             }
 
-            // create playlist of tracks from specific range
+        // create playlist of tracks from specific range
             spotifyApi.createPlaylist('BPM range: ' + bpm1 + '-' + bpm2)
             .then(function(data) {
-                console.log("Success")
+                spotifyApi.addTracksToPlaylist(data.body.id, tracks)
+                console.log(data.body)
             }, function(err) {
                 console.log("Error")
-            })
-            // for (let track of tracks) {
-            //     spotifyApi.addTracksToPlaylist(track.id, 'BPM range:'+ bpm1 + '-' + bpm2)
-            // }
+            });
     }
 }
-
 
     return (
             <div>

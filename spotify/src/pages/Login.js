@@ -15,7 +15,7 @@ var querystring = require('querystring');
 var client_id = 'c9815be2d35041f69712acba82f994b9'; // Your client id
 var client_secret = '7b7db31553ad466e9cac3c24a3890bce'; // Your secret
 var redirect_uri = 'http://localhost:3000/'; // Your redirect uri
-var scope = 'user-read-private user-read-email user-read-playback-state user-modify-playback-state user-library-read user-library-modify';
+var scope = 'user-read-private user-read-email user-read-playback-state user-modify-playback-state user-library-read user-library-modify playlist-modify-public playlist-modify-private playlist-read-private';
 var state = generateRandomString(16);
 
 const AUTH_URL = 'https://accounts.spotify.com/authorize?' +
