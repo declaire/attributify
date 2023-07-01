@@ -3,6 +3,12 @@ const spotifyWebApi = require('spotify-web-api-node');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
+// const corsOptions = {
+//     origin: 'http://localhost:3000/',
+//     credentials: true,
+//     optionsSuccessStatus: 200
+// }
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());

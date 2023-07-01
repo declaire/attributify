@@ -19,45 +19,50 @@ export default function Main({code}) {
     const [bpm1, setBpm1] = useState(null)
     const [bpm2, setBpm2] = useState(null)
 
-    function showBpmRange() {
-        if (isNaN(parseFloat(bpm1)) || isNaN(parseFloat(bpm2)) || bpm1 == null || bpm2 == null) {
-            alert("Please enter a range of BPM values")
-        } else {
-            alert("The range of BPM values is " + bpm1 + " - " + bpm2)
-        }
-    }
-
     async function generateTracks() {
         if (!accessToken) return
-        if (isNaN(parseFloat(bpm1)) || isNaN(parseFloat(bpm2)) || bpm1 == null || bpm2 == null) {
+        if (isNaN(parseFloat(bpm1)) || isNaN(parseFloat(bpm2)) || bpm1 == null || bpm2 == null || parseFloat(bpm1) > parseFloat(bpm2)) {    
             alert("Please enter a valid range of BPM values.")
         } else {
+            const tracks = []
+
+            // get all saved tracks
             const data = await spotifyApi.getMySavedTracks({
                 limit: 50,
                 offset: 1
+            }).then(data => {
+                return data;
             })
 
-            // retrieve tracks from saved songs of specific bpm range
-            let tracks = []
+            // get tracks from specified bpm range from saved tracks
             for (let track_obj of data.body.items) {
                 const track = track_obj.track
-                const track_analysis = spotifyApi.getAudioFeaturesForTrack(track)
-                const tempo = track_analysis.body.audio_features.tempo
-                if (bpm1 <= tempo && tempo <= bpm2) {
-                    tracks.push(track)
+                const track_analysis = await spotifyApi.getAudioFeaturesForTrack(track.id)
+                .then(data => {
+                    return data;
+                })
+                const tempo = track_analysis.body.tempo
+                if (parseFloat(bpm1) <= parseFloat(tempo) && parseFloat(tempo) <= parseFloat(bpm2)) {
                     console.log(track.name)
+                    tracks.push(track)
                 }
             }
-
+            console.log(tracks.length)
             if (tracks.length == 0) {
+                alert("No saved tracks within BPM range.")
                 return;
             }
 
             // create playlist of tracks from specific range
             spotifyApi.createPlaylist('BPM range: ' + bpm1 + '-' + bpm2)
-            for (let track of tracks) {
-                spotifyApi.addTracksToPlaylist(track.id, 'BPM range:'+ bpm1 + '-' + bpm2)
-            }
+            .then(function(data) {
+                console.log("Success")
+            }, function(err) {
+                console.log("Error")
+            })
+            // for (let track of tracks) {
+            //     spotifyApi.addTracksToPlaylist(track.id, 'BPM range:'+ bpm1 + '-' + bpm2)
+            // }
     }
 }
 
