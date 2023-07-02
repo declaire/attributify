@@ -2,6 +2,7 @@ import React from 'react'
 import useAuth from "../hooks/useAuth"
 import { useEffect, useState } from "react"
 import SpotifyWebApi from 'spotify-web-api-node';
+import Result from "./Result"
 
 const spotifyApi = new SpotifyWebApi({
     clientId: 'c9815be2d35041f69712acba82f994b9',
@@ -18,9 +19,11 @@ export default function Main({code}) {
 
     const [bpm1, setBpm1] = useState(null)
     const [bpm2, setBpm2] = useState(null)
+    const [genTrackSuccess, setGenTrackSuccess] = useState(false)
+    const [loading, setLoading] = useState(false)
+
 
     async function generateTracks() {
-        if (!accessToken) return
         if (isNaN(parseFloat(bpm1)) || isNaN(parseFloat(bpm2)) || bpm1 == null || bpm2 == null || parseFloat(bpm1) > parseFloat(bpm2)) {    
             alert("Please enter a valid range of BPM values.")
         } else {
@@ -33,7 +36,8 @@ export default function Main({code}) {
             }).then(data => {
                 return data;
             })
-
+            
+            setLoading(true)
             // get tracks from specified bpm range from saved tracks
             for (let track_obj of data.body.items) {
                 const track = track_obj.track
@@ -47,6 +51,8 @@ export default function Main({code}) {
                     tracks.push(track.uri)
                 }
             }
+            setLoading(false)
+
             console.log(tracks.length)
             if (tracks.length == 0) {
                 alert("No saved tracks within BPM range.")
@@ -61,17 +67,22 @@ export default function Main({code}) {
             }, function(err) {
                 console.log("Error")
             });
+            setGenTrackSuccess(true)
+        }
     }
-}
+
 
     return (
             <div>
-                <h1>Enter a range of BPM values:</h1>
+                {!genTrackSuccess ? (<><h1>Enter a range of BPM values:</h1><label>BPM 1: </label><input type="text" value={bpm1} onChange={(e) => setBpm1(e.target.value)} /><label> BPM 2: </label><input type="text" value={bpm2} onChange={(e) => setBpm2(e.target.value)} /><button onClick={generateTracks}>Create Playlist</button></>)
+                : (<><h1>Your Spotify Playlist has been created!</h1><button>Open in Spotify</button></>)}
+                {/* <h1>Enter a range of BPM values:</h1>
                 <label>BPM 1: </label>
                 <input type="text" value = {bpm1} onChange={(e)=> setBpm1(e.target.value)} />
                 <label> BPM 2: </label>
                 <input type="text" value = {bpm2} onChange={(e)=> setBpm2(e.target.value)} />
                 <button onClick={generateTracks}>Create Playlist</button>
+                <RenderResult /> */}
             </div>
         )
 }
