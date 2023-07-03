@@ -31,7 +31,10 @@ export default function Login() {
     return <div>
         <h1>Spotify BPM Playlist Generator</h1>
         <a href={AUTH_URL}>
+   
+   
             <button>Login to Spotify</button>
         </a>
     </div>
 }
+ 
