@@ -1,5 +1,6 @@
 import React from "react"
-import { Container, NavItem } from "react-bootstrap"
+import { Container, NavItem, Button } from "react-bootstrap"
+import "./Index.css"
 
 var generateRandomString = function(length) {
   var text = '';
@@ -25,16 +26,14 @@ const AUTH_URL = 'https://accounts.spotify.com/authorize?' +
       scope: scope,
       redirect_uri: redirect_uri,
       state: state})
-// const AUTH_URL = "https://accounts.spotify.com/authorize?client_id=c9815be2d35041f69712acba82f994b9&response_type=code&redirect_uri=http://localhost:3000/&scope=streaming%20"
 
 export default function Login() {
-    return <div>
-        <h1>Spotify BPM Playlist Generator</h1>
-        <a href={AUTH_URL}>
-   
-   
-            <button>Login to Spotify</button>
-        </a>
+    return <div className="wrapper">
+      <header className="header">
+          <h1 className="text-center display-4" style={{fontSize:"100px"}}>Tempify</h1>
+          <p className="text-center display-4" style={{fontSize:"20px"}}>A tempo-based playlist generator. Perfect for workouts, studying, sleep, and more.</p>
+        </header>
+          <Button className="btn btn-lg" href={AUTH_URL}>Connect to Spotify</Button>
     </div>
 }
  

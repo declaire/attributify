@@ -36,6 +36,5 @@ export default function useAuth(code) {
         return () => clearInterval(interval)
     }, [refreshToken, expiresIn] )
 
-    console.log(accessToken)
     return accessToken
 }
