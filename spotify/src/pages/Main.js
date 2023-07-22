@@ -3,7 +3,7 @@ import useAuth from "../hooks/useAuth"
 import { useEffect, useState } from "react"
 import SpotifyWebApi from 'spotify-web-api-node';
 import { Spotify } from "react-spotify-embed";
-import Slider from "react-slider"
+import ReactSlider from "react-slider"
 import "./Index.css"
 import {Container, Button} from 'react-bootstrap'
 
@@ -59,7 +59,7 @@ export default function Main({code}) {
 
         console.log(tracks.length)
         if (tracks.length == 0) {
-            alert("No saved tracks within BPM range.")
+            alert("No tracks within BPM range.")
             return;
         }
             // create playlist of tracks from specific range
@@ -80,10 +80,19 @@ export default function Main({code}) {
             <div class="tempo-input">
                 <p class="input">{bpmVals[0]} - {bpmVals[1]}</p>
             </div>
-            <Slider class={"slider"} onChange={setBpmVals} trackStyle={{backgroundColor: "blueviolet"}} value={bpmVals} min={MIN} max={MAX}/>
+            <ReactSlider class={"slider"} trackClassName="track" onChange={setBpmVals} value={bpmVals} min={MIN} max={MAX}/>
             <Button className="btn btn-lg" onClick={generateTracks} disabled={loading}>
                 Generate Playlist 
             </Button>
+           
+            {genTrackSuccess ? (
+        /* Your content here when condition is true */
+                <div class="playlist-display">
+                        <h1 className="text-center display-4" style={{fontSize: "30px"}}>Your playlist has been generated!</h1>
+                        <Spotify wide link={generatedPlaylist} />
+                        <Button className="btn btn-lg">Open in Spotify</Button>
+                </div>
+             ) : (<></>)}
         </div> 
         )
 }

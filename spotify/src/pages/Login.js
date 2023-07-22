@@ -32,6 +32,7 @@ export default function Login() {
       <header className="header">
           <h1 className="text-center display-4" style={{fontSize:"100px"}}>Tempify</h1>
           <p className="text-center display-4" style={{fontSize:"20px"}}>A tempo-based playlist generator. Perfect for workouts, studying, sleep, and more.</p>
+          <p className="text-center display-4" style= {{fontSize:"20px" , fontStyle: "italic"}}>Tempo: the speed or pace of a song</p>
         </header>
           <Button className="btn btn-lg" href={AUTH_URL}>Connect to Spotify</Button>
     </div>

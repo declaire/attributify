@@ -21,7 +21,6 @@
     border-color: rgb(156, 98, 209);
 }
 
-
 .tempo-input {
     background-color: blueviolet;
     width: 6%;
@@ -34,27 +33,25 @@
     color: white
 }
 
-.tempo-input:before{
+.tempo-input::after{
     content: "";
-    position: absolute;
+    position: relative;
     border-top: 15px solid blueviolet;
     border-right: 15px solid transparent;
     border-left: 15px solid transparent;
     margin: auto;
-
-    bottom: -14px;
+    bottom: -7px;
 }
 
 .header {
-    min-height: 25vh
+    min-height: 30vh
 }
 
 
 .slider{
-    margin: 35px;
+    margin: 40px;
     width: 500px;
-    height: 5px;
-    background-color: #ab52ff;
+  
 }
 
 .slider .thumb {
@@ -64,5 +61,23 @@
     background-color: white;
     border-radius: 50%;
     top: -12px;
-    border: 3px solid #8a2be2;
+    border: 3px solid blueviolet;
+}
+
+.track{
+    height: 5px;
+    background: blueviolet;
+}
+
+.track.track-0{
+    background: rgb(192, 192, 192);
+}
+
+.track.track-2{
+    background: rgb(192, 192, 192);
+}
+
+.playlist-display{
+    margin: 30px;
+    min-height: 50vh;
 }
