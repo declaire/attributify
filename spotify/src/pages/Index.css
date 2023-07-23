@@ -77,7 +77,23 @@
     background: rgb(192, 192, 192);
 }
 
-.playlist-display{
-    margin: 30px;
-    min-height: 50vh;
+.playlist-display-area{
+    margin: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.playlist-display-area .btn {
+    background-color: blueviolet;
+    border-color: blueviolet;
+    margin: 20px
+}
+
+.playlist-display-area .btn:hover {
+    background-color: rgb(102, 32, 168);
+    border-color: rgb(102, 32, 168);
+    align-items: center;
+    justify-content: center;
 }

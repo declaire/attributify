@@ -5,7 +5,8 @@ import SpotifyWebApi from 'spotify-web-api-node';
 import { Spotify } from "react-spotify-embed";
 import ReactSlider from "react-slider"
 import "./Index.css"
-import {Container, Button} from 'react-bootstrap'
+import {Button} from 'react-bootstrap'
+import {ClipLoader} from 'react-spinners'
 
 
 const spotifyApi = new SpotifyWebApi({
@@ -31,8 +32,8 @@ export default function Main({code}) {
 
     async function generateTracks() {
         setGenTrackSuccess(false)
+        setLoading(true)
         const tracks = []
-
         // get all saved tracks
         const data = await spotifyApi.getMySavedTracks({
             limit: 50,
@@ -41,7 +42,7 @@ export default function Main({code}) {
             return data;
         })
         
-        setLoading(true)
+        
         // get tracks from specified bpm range from saved tracks
         for (let track_obj of data.body.items) {
             const track = track_obj.track
@@ -72,27 +73,42 @@ export default function Main({code}) {
     }
 
     return (
-        <div class="wrapper" >
+        <>
+        <div class="wrapper">
             <header>
                 <h1 className="text-center display-4">Tempo Range</h1>
-                <p className="text-center display-4"style={{fontSize:"20px"}}>Use slider to select tempo range</p>
+                <p className="text-center display-4" style={{ fontSize: "20px" }}>Use slider to select tempo range</p>
             </header>
             <div class="tempo-input">
                 <p class="input">{bpmVals[0]} - {bpmVals[1]}</p>
             </div>
-            <ReactSlider class={"slider"} trackClassName="track" onChange={setBpmVals} value={bpmVals} min={MIN} max={MAX}/>
+            <ReactSlider class={"slider"} trackClassName="track" onChange={setBpmVals} value={bpmVals} min={MIN} max={MAX} step={10} />
             <Button className="btn btn-lg" onClick={generateTracks} disabled={loading}>
-                Generate Playlist 
+                Generate Playlist
             </Button>
-           
-            {genTrackSuccess ? (
-        /* Your content here when condition is true */
-                <div class="playlist-display">
-                        <h1 className="text-center display-4" style={{fontSize: "30px"}}>Your playlist has been generated!</h1>
-                        <Spotify wide link={generatedPlaylist} />
-                        <Button className="btn btn-lg">Open in Spotify</Button>
-                </div>
-             ) : (<></>)}
-        </div> 
+        </div>
+        
+        <div class="playlist-display-area">
+                {loading ? (
+                    <div class="loading-spinner">
+                        <ClipLoader
+                            color={"blueviolet"}
+                            loading={loading}
+                            size={100}
+                            aria-label="Loading Spinner"
+                            data-testid="loader"
+                        />
+                    </div>
+                ) : (<></>)}
+                {genTrackSuccess ? (
+                    <>
+                        <div class="playlist-display">
+                            <h1 className="text-center display-4" style={{ fontSize: "30px" }}>Your playlist has been generated!</h1>
+                            <Spotify wide link={generatedPlaylist} />
+                        </div>
+                        <Button className="btn" onClick={() => window.open(generatedPlaylist)}>Open in Spotify</Button></>
+                ) : (<></>)}
+            </div>
+        </>
         )
 }

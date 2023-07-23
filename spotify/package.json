@@ -8,6 +8,7 @@
     "react-bootstrap": "^2.8.0",
     "react-scripts": "^5.0.1",
     "react-slider": "^2.0.6",
+    "react-spinners": "^0.13.8",
     "react-spotify-embed": "^2.0.3",
     "spotify-web-api-node": "^5.0.2",
     "styled-components": "^6.0.4"
