@@ -29,47 +29,67 @@ export default function Main({code}) {
     const [genTrackSuccess, setGenTrackSuccess] = useState(false)
     const [loading, setLoading] = useState(false)
     const [generatedPlaylist, setGeneratedPlaylist] = useState("")
+    const [emptyPlaylist, setEmptyPlaylist] = useState(false)
 
     async function generateTracks() {
+        setEmptyPlaylist(false)
         setGenTrackSuccess(false)
         setLoading(true)
         const tracks = []
-        // get all saved tracks
-        const data = await spotifyApi.getMySavedTracks({
-            limit: 50,
-            offset: 1
-        }).then(data => {
+        const topArtistsID = []
+        const topTracksID = []
+        //get top artists
+        const topArtists = await spotifyApi.getMyTopArtists()
+        .then(data => {
             return data;
         })
-        
-        
-        // get tracks from specified bpm range from saved tracks
-        for (let track_obj of data.body.items) {
-            const track = track_obj.track
-            const track_analysis = await spotifyApi.getAudioFeaturesForTrack(track.id)
-            .then(data => {
-                return data;
-            })
-            const tempo = track_analysis.body.tempo
-            if (parseFloat(bpmVals[0]) <= parseFloat(tempo) && parseFloat(tempo) <= parseFloat(bpmVals[1])) {
-                console.log(track)
-                tracks.push(track.uri)
-            }
+        topArtistsID.push(topArtists.body.items[0].id)
+        topArtistsID.push(topArtists.body.items[1].id)
+
+        const topTracks = await spotifyApi.getMyTopTracks()
+        .then(data => {
+            return data;
+        })
+        topTracksID.push(topTracks.body.items[0].id)
+        topTracksID.push(topTracks.body.items[1].id)
+        topTracksID.push(topTracks.body.items[2].id)
+        // get recommended tracks 
+        const recommendations = await spotifyApi.getRecommendations({
+            limit: 50,
+            min_tempo: parseFloat(bpmVals[0]),
+            max_tempo: parseFloat(bpmVals[1]),
+            seed_artists: topArtistsID,
+            seed_tracks: topTracksID
+          })
+        .then(data => {
+          return data;
+        })
+
+        console.log(recommendations)
+
+        for (let track_obj of recommendations.body.tracks) {
+            tracks.push(track_obj.uri)
         }
         setLoading(false)
 
-        console.log(tracks.length)
-        if (tracks.length == 0) {
-            alert("No tracks within BPM range.")
+        if (tracks.length === 0) {
+            setEmptyPlaylist(true)
             return;
         }
-            // create playlist of tracks from specific range
+        // create playlist of tracks from specific range
         const playlist = await spotifyApi.createPlaylist('BPM: ' + bpmVals[0] + '-' + bpmVals[1])
         .then(data => {return data})
-        spotifyApi.addTracksToPlaylist(playlist.body.id, tracks);
+
+        const chunkSize = 100;
+        let index = 0;
+        while (index < tracks.length) {
+            const chunk = tracks.slice(index, index + chunkSize);
+            spotifyApi.addTracksToPlaylist(playlist.body.id, chunk);
+            index += chunkSize;
+        }
         setGeneratedPlaylist("https://open.spotify.com/playlist/" + playlist.body.id)
         setGenTrackSuccess(true)
-        
+    
     }
 
     return (
@@ -99,6 +119,9 @@ export default function Main({code}) {
                             data-testid="loader"
                         />
                     </div>
+                ) : (<></>)}
+                {emptyPlaylist && !loading ? (
+                    <h1 className="text-center display-4" style={{ fontSize: "30px" }}>No tracks within selected tempo range.</h1>
                 ) : (<></>)}
                 {genTrackSuccess ? (
                     <>
