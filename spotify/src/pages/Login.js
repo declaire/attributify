@@ -16,7 +16,7 @@ var querystring = require('querystring');
 var client_id = 'c9815be2d35041f69712acba82f994b9'; // Your client id
 var client_secret = '7b7db31553ad466e9cac3c24a3890bce'; // Your secret
 var redirect_uri = 'http://localhost:3000/'; // Your redirect uri
-var scope = 'user-read-private user-library-read user-library-modify playlist-modify-public playlist-modify-private playlist-read-private user-top-read';
+var scope = 'user-library-read user-library-modify playlist-modify-public user-top-read';
 var state = generateRandomString(16);
 
 const AUTH_URL = 'https://accounts.spotify.com/authorize?' +
@@ -30,11 +30,12 @@ const AUTH_URL = 'https://accounts.spotify.com/authorize?' +
 export default function Login() {
     return <div className="wrapper">
       <header className="header">
-          <h1 className="text-center display-4" style={{fontSize:"100px"}}>Tempify</h1>
-          <p className="text-center display-4" style={{fontSize:"20px"}}>A tempo-based playlist generator. Perfect for workouts, studying, sleep, and more.</p>
-          <p className="text-center display-4" style= {{fontSize:"20px" , fontStyle: "italic"}}>Tempo: the speed or pace of a song</p>
+          <h1 className="text-center display-4" style={{fontSize:"100px"}}>Attributify</h1>
+          <p className="text-center display-4" style={{fontSize:"20px"}}>A personalized playlist generator based on song attributes and your listening history.</p>
+          <p className="text-center display-4" style= {{fontSize:"20px" , fontStyle: "italic"}}>Create playlists and discover music based on song tempo and energy</p>
       </header>
           <Button className="btn btn-lg" href={AUTH_URL}>Connect to Spotify</Button>
+          <p className="text-center display-4" style={{fontSize:"20px"}}>Note: Attributify requires access to your listening history to recommend music you may like</p>
     </div>
 }
  

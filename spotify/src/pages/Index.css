@@ -1,5 +1,5 @@
 .wrapper{
-    min-height: 60vh;
+    min-height: 70vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,6 +9,7 @@
 .wrapper .btn {
     background-color: blueviolet;
     border-color: blueviolet;
+    margin: 30px
 }
 
 .wrapper .btn:hover {
@@ -23,9 +24,9 @@
 
 .tempo-input {
     background-color: blueviolet;
-    width: 110px;
+    width: 80px;
     height: 50px;
-    margin: 10px;
+    margin: 5px;
     padding: 10px 0;
     border-radius: 5px;
     text-align: center;
@@ -49,7 +50,7 @@
 
 
 .slider{
-    margin: 40px;
+    margin: 30px;
     width: 500px;
   
 }
@@ -66,19 +67,12 @@
 
 .track{
     height: 5px;
-    background: blueviolet;
+    background: rgb(184, 184, 184);
 }
 
-.track.track-0{
-    background: rgb(192, 192, 192);
-}
-
-.track.track-2{
-    background: rgb(192, 192, 192);
-}
 
 .playlist-display-area{
-    margin: 10px;
+    margin: 20px;
 
     display: flex;
     flex-direction: column;
@@ -87,8 +81,8 @@
 
 .playlist-display-area .btn {
     background-color: blueviolet;
-    border-color: blueviolet;
-    margin: 20px
+    border-color: rgb(255, 255, 255);
+    margin: 2 px
 }
 
 .playlist-display-area .btn:hover {
@@ -96,4 +90,19 @@
     border-color: rgb(102, 32, 168);
     align-items: center;
     justify-content: center;
+}
+
+.energy-buttons .btn{
+    color: blueviolet;
+    background-color: rgb(255, 255, 255);
+    border-color: blueviolet;
+    border-radius: 20px;
+    border-width: 2px;
+
+}
+
+
+.wrapper .energy-buttons .active {
+    background-color: blueviolet;
+    border-color: blueviolet;
 }

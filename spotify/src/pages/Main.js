@@ -22,15 +22,32 @@ export default function Main({code}) {
         spotifyApi.setAccessToken(accessToken);
     }, [accessToken])
 
-    const MIN = 0;
-    const MAX = 300;
-    
-    const [bpmVals, setBpmVals] = useState([MIN, MAX])
+    const BPMSTART = 120;
+    const HIGHENERGY = [0.67, 1]
+    const LOWENERGY = [0, 0.39]
+    const MEDIUMENERGY = [0.4, 0.66]
+    const [bpm, setBpm] = useState(BPMSTART)
+    const [energy, setEnergy] = useState("medium")
+    const [energyForCalc, setEnergyForCalc] = useState(MEDIUMENERGY)
     const [genTrackSuccess, setGenTrackSuccess] = useState(false)
     const [loading, setLoading] = useState(false)
     const [generatedPlaylist, setGeneratedPlaylist] = useState("")
     const [emptyPlaylist, setEmptyPlaylist] = useState(false)
 
+    const handleClick = (event) => {
+        setEnergy(event.target.id);
+        if (event.target.id === "low") {
+            setEnergyForCalc(LOWENERGY)
+        }
+        else if (event.target.id === "medium") {
+            setEnergyForCalc(MEDIUMENERGY)
+        }
+        else if (event.target.id === "high") {
+            setEnergyForCalc(HIGHENERGY)
+        }
+    }
+
+        
     async function generateTracks() {
         setEmptyPlaylist(false)
         setGenTrackSuccess(false)
@@ -46,7 +63,9 @@ export default function Main({code}) {
         topArtistsID.push(topArtists.body.items[0].id)
         topArtistsID.push(topArtists.body.items[1].id)
 
-        const topTracks = await spotifyApi.getMyTopTracks()
+        const topTracks = await spotifyApi.getMyTopTracks({
+            time_range: "short_term"
+        })
         .then(data => {
             return data;
         })
@@ -55,21 +74,22 @@ export default function Main({code}) {
         topTracksID.push(topTracks.body.items[2].id)
         // get recommended tracks 
         const recommendations = await spotifyApi.getRecommendations({
-            limit: 50,
-            min_tempo: parseFloat(bpmVals[0]),
-            max_tempo: parseFloat(bpmVals[1]),
+            limit: 100,
+            target_tempo: bpm,
+            min_tempo: bpm-10,
+            max_tempo: bpm+10,
+            min_energy: energyForCalc[0],
+            max_energy: energyForCalc[1],
             seed_artists: topArtistsID,
             seed_tracks: topTracksID
           })
         .then(data => {
           return data;
         })
-
-        console.log(recommendations)
-
         for (let track_obj of recommendations.body.tracks) {
             tracks.push(track_obj.uri)
         }
+  
         setLoading(false)
 
         if (tracks.length === 0) {
@@ -77,7 +97,7 @@ export default function Main({code}) {
             return;
         }
         // create playlist of tracks from specific range
-        const playlist = await spotifyApi.createPlaylist('BPM: ' + bpmVals[0] + '-' + bpmVals[1])
+        const playlist = await spotifyApi.createPlaylist('BPM: ' + bpm + ', Energy: ' + energy )
         .then(data => {return data})
 
         const chunkSize = 100;
@@ -96,18 +116,30 @@ export default function Main({code}) {
         <>
         <div class="wrapper">
             <header>
-                <h1 className="text-center display-4">Tempo Range</h1>
-                <p className="text-center display-4" style={{ fontSize: "20px" }}>Use slider to select tempo range</p>
+                <p className="text-center display-4" style={{fontSize: "50px"}}>Tempo</p>
+                <p className="text-center display-4" style={{ fontSize: "20px" }}>Tempo: the speed or pace of a song</p>
             </header>
             <div class="tempo-input">
-                <p class="input">{bpmVals[0]} - {bpmVals[1]}</p>
+                <p class="input">{bpm}</p>
             </div>
-            <ReactSlider class={"slider"} trackClassName="track" onChange={setBpmVals} value={bpmVals} min={MIN} max={MAX} step={10} />
+            <ReactSlider class={"slider"} trackClassName="track" onChange={setBpm} value={bpm} min={0} max={240} step={10} />
+
+            <header>
+                <p className="text-center display-4" style={{fontSize: "50px"}}>Energy</p>
+                <p className="text-center display-4" style={{ fontSize: "20px" }}>Energy: the intensity and activity of a song</p>
+            </header>
+  
+            <div class="energy-buttons">
+                <Button className = {energy === "low" ? "active" : undefined} id = "low" onClick={handleClick}>Low</Button>
+                <Button className = {energy === "medium" ? "active" : undefined} id = "medium" onClick={handleClick}>Medium</Button>
+                <Button className = {energy === "high" ? "active" : undefined} id = "high" onClick={handleClick}>High</Button>
+
+            </div>
             <Button className="btn btn-lg" onClick={generateTracks} disabled={loading}>
                 Generate Playlist
             </Button>
         </div>
-        
+       
         <div class="playlist-display-area">
                 {loading ? (
                     <div class="loading-spinner">
@@ -121,7 +153,7 @@ export default function Main({code}) {
                     </div>
                 ) : (<></>)}
                 {emptyPlaylist && !loading ? (
-                    <h1 className="text-center display-4" style={{ fontSize: "30px" }}>No tracks within selected tempo range.</h1>
+                    <h1 className="text-center display-4" style={{ fontSize: "30px" }}>No songs with selected attributes.</h1>
                 ) : (<></>)}
                 {genTrackSuccess ? (
                     <>
