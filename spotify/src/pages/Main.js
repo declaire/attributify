@@ -15,6 +15,11 @@ const spotifyApi = new SpotifyWebApi({
 });
 
 export default function Main({code}) {
+    const BPMSTART = 120;
+    const HIGHENERGY = [0.67, 1]
+    const LOWENERGY = [0, 0.39]
+    const MEDIUMENERGY = [0.4, 0.66]
+    
     const accessToken = useAuth(code)
     
     useEffect(() => {
@@ -22,10 +27,6 @@ export default function Main({code}) {
         spotifyApi.setAccessToken(accessToken);
     }, [accessToken])
 
-    const BPMSTART = 120;
-    const HIGHENERGY = [0.67, 1]
-    const LOWENERGY = [0, 0.39]
-    const MEDIUMENERGY = [0.4, 0.66]
     const [bpm, setBpm] = useState(BPMSTART)
     const [energy, setEnergy] = useState("medium")
     const [energyForCalc, setEnergyForCalc] = useState(MEDIUMENERGY)
@@ -46,8 +47,7 @@ export default function Main({code}) {
             setEnergyForCalc(HIGHENERGY)
         }
     }
-
-        
+  
     async function generateTracks() {
         setEmptyPlaylist(false)
         setGenTrackSuccess(false)
@@ -100,13 +100,7 @@ export default function Main({code}) {
         const playlist = await spotifyApi.createPlaylist('BPM: ' + bpm + ', Energy: ' + energy )
         .then(data => {return data})
 
-        const chunkSize = 100;
-        let index = 0;
-        while (index < tracks.length) {
-            const chunk = tracks.slice(index, index + chunkSize);
-            spotifyApi.addTracksToPlaylist(playlist.body.id, chunk);
-            index += chunkSize;
-        }
+        spotifyApi.addTracksToPlaylist(playlist.body.id, tracks);
         setGeneratedPlaylist("https://open.spotify.com/playlist/" + playlist.body.id)
         setGenTrackSuccess(true)
     

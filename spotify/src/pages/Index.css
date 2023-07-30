@@ -9,7 +9,7 @@
 .wrapper .btn {
     background-color: blueviolet;
     border-color: blueviolet;
-    margin: 30px
+    margin: 25px
 }
 
 .wrapper .btn:hover {
@@ -72,8 +72,6 @@
 
 
 .playlist-display-area{
-    margin: 20px;
-
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -98,6 +96,7 @@
     border-color: blueviolet;
     border-radius: 20px;
     border-width: 2px;
+
 
 }
 
