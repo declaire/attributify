@@ -6,16 +6,16 @@ To run the app and use the Spotify Web API, you will need to register your own S
 1. Create an application here: https://developer.spotify.com/
 2. Add http://localhost:3000/callback as the redirect uri to the application
 3. Create a <code>config.js</code> file in the root of the project and load in the <code>CLIENT_ID</code>, <code>CLIENT_SECRET</code>, and <code>REDIRECT_URI</code> variables
+4. Create the same <code>config.js</code> file in the spotify directory
 
 ## Installing dependencies
-In your console in the project directory, run <code>npm install --save</code>
+In the server and spotify directories, run <code>npm install --save</code> in your console
 
 ## Running the app locally
 For a development build:
 1. To start the server, enter the server directory and run <code>npm run devStart</code> in your console
 2. To run the front end, enter the spotify directory and run <code>npm start</code> in your console
-
-Open http://localhost:3000/ in your browser.
+3. Open http://localhost:3000/ in your browser
 
 
 
