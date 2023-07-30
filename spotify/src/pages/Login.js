@@ -1,6 +1,7 @@
 import React from "react"
-import { Container, NavItem, Button } from "react-bootstrap"
+import { Button } from "react-bootstrap"
 import "./Index.css"
+const config = require('../config.js');
 
 var generateRandomString = function(length) {
   var text = '';
@@ -13,9 +14,9 @@ var generateRandomString = function(length) {
 };
 
 var querystring = require('querystring');
-var client_id = 'c9815be2d35041f69712acba82f994b9'; // Your client id
-var client_secret = '7b7db31553ad466e9cac3c24a3890bce'; // Your secret
-var redirect_uri = 'http://localhost:3000/'; // Your redirect uri
+var client_id = config.CLIENT_ID;
+ // Your client id
+var redirect_uri = config.REDIRECT_URI; // Your redirect uri
 var scope = 'user-library-read user-library-modify playlist-modify-public user-top-read';
 var state = generateRandomString(16);
 

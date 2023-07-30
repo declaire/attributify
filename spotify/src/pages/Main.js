@@ -8,10 +8,10 @@ import "./Index.css"
 import {Button} from 'react-bootstrap'
 import {ClipLoader} from 'react-spinners'
 
-
+const config = require('../config.js')
 const spotifyApi = new SpotifyWebApi({
-    clientId: 'c9815be2d35041f69712acba82f994b9',
-    clientSecret: '7b7db31553ad466e9cac3c24a3890bce'
+    clientId: config.CLIENT_ID,
+    clientSecret: config.CLIENT_SECRET
 });
 
 export default function Main({code}) {

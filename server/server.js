@@ -2,6 +2,7 @@ const express = require('express');
 const spotifyWebApi = require('spotify-web-api-node');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const config = require('../config.js');
 
 // const corsOptions = {
 //     origin: 'http://localhost:3000/',
@@ -16,9 +17,9 @@ app.use(bodyParser.json());
 app.post('/refresh', (req, res) => {
     const refreshToken = req.body.refresh_token
     const spotifyApi = new spotifyWebApi({
-        clientId: 'c9815be2d35041f69712acba82f994b9',
-        clientSecret: '7b7db31553ad466e9cac3c24a3890bce',
-        redirectUri: 'http://localhost:3000/',
+        clientId: config.CLIENT_ID,
+        clientSecret: config.CLIENT_SECRET,
+        redirectUri: config.REDIRECT_URI,
         refreshToken,
     })
     spotifyApi.refreshAccessToken().then(
@@ -37,9 +38,9 @@ app.post('/refresh', (req, res) => {
 app.post('/login', (req, res) => {
     const code = req.body.code;
     const spotifyApi = new spotifyWebApi({
-        clientId: 'c9815be2d35041f69712acba82f994b9',
-        clientSecret: '7b7db31553ad466e9cac3c24a3890bce',
-        redirectUri: 'http://localhost:3000/'
+        clientId: config.CLIENT_ID,
+        clientSecret: config.CLIENT_SECRET,
+        redirectUri: config.REDIRECT_URI
     })
 
     spotifyApi.authorizationCodeGrant(code).then(data => {
