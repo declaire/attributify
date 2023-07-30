@@ -11,7 +11,11 @@ To run the app and use the Spotify Web API, you will need to register your own S
 In your console in the project directory, run <code>npm install --save</code>
 
 ## Running the app locally
-For a development build, run <code>npm start && npm run devStart</code>
+For a development build:
+1. To start the server, enter the server directory and run <code>npm run devStart</code> in your console
+2. To run the front end, enter the spotify directory and run <code>npm start</code> in your console
+
+Open http://localhost:3000/ in your browser.
 
 
 
