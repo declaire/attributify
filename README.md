@@ -1,6 +1,10 @@
 # Attributify: a Spotify playlist generator
 This project is an web application allowing users to generate custom Spotify playlists. Users can select their desired attributes for songs, and the app will generate a personalized playlist with recommended songs based on listening history and desired attributes.
 
+## Demo
+
+https://youtu.be/XJJCSKc7YOo
+
 ## Setting up with Spotify
 To run the app and use the Spotify Web API, you will need to register your own Spotify app with the Spotify Developer Dashboard and set the credentials within a config file. Process is as follows:
 1. Create an application here: https://developer.spotify.com/
